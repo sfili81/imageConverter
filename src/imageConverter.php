@@ -1,6 +1,6 @@
 <?php
 
-namespace sfili81\imageConverter;
+namespace sfili81\ImgConverter;
 
 /**
  * @link 

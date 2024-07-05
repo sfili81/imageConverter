@@ -1,41 +1,25 @@
 {
 
     "name": "sfili81/image-converter",
-
     "description": "This widget generates (if note exist) images with extension webp and avif",
-
     "type": "yii2-extension",
-
     "keywords": ["yii2","extension"],
-
     "license": "BSD-4-Clause",
-
     "authors": [
-
         {
-
             "name": "Federico Sfiligoi",
-
             "email": "littlehun81@gmail.com"
-
         }
 
     ],
 
     "require": {
-
         "yiisoft/yii2": "~2.0.0"
-
     },
 
     "autoload": {
-
         "psr-4": {
-
             "sfili81\\": ""
-
         }
-
     }
-
 }
