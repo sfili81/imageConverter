@@ -15,7 +15,7 @@
 },
 "autoload": {
 "psr-4": {
-"sfili81\\ImgConverter\\": ""
+"sfili81\\ImgConverter\\": "src/"
 }
 }
 }
