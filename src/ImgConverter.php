@@ -26,17 +26,17 @@ class ImgConverter extends Widget {
 	private $_webp = null;
 
     /**
-	 * @var int quality value for the generated WebP/AVIF file 
+	 * @var int quality value for the generated WebP/AVIF file (default 80)
 	 */
     public $quality = 80;
 
 	/**
-	 * @var string path to the generated AVIF file formator null
+	 * @var string path to the generated AVIF file formator (default null)
 	 */
 	private $_avif = null;
 
     /**
-	 * @var array (optional)
+	 * @var array Array of options related to the img tag (optional)
 	 */
     public $options;
 
@@ -63,12 +63,12 @@ class ImgConverter extends Widget {
 	}
 
     public function run() {     
-		// our unoptimized image (include all the possible attributes)
+		// originale image (with array options)
 		$img = Html::img(Yii::getAlias('@web') . $this->src, 
 			$this->options,
 		);
 
-		// was WebP/AVIF image generated from our unoptimized image?
+		// If webp||avif image are created include the img into picture tag
 		if ($this->_webp != null || $this->_avif != null)
 		{
             if($this->_avif) $this->_avif = Yii::getAlias('@web') .$this->_avif;
@@ -80,7 +80,7 @@ class ImgConverter extends Widget {
 			if($this->_avif) $html .= Html::tag("source", [], ["srcset" => $this->_avif, "type" => "image/avif"]);
 			if($this->_webp) $html .= Html::tag("source", [], ["srcset" => $this->_webp, "type" => "image/webp"]);
 
-			// fallback image (unoptimized)
+			// original image 
 			$html .= $img;
 			$html .= "</picture>";
 
@@ -90,14 +90,8 @@ class ImgConverter extends Widget {
 			$html = $img;
 		}
 
-		// if lightbox attribute is present - wrap the image into a lightbox friendly
-		// <a href link
-		/*if ($this->lightbox_data)
-		{
-			return Html::a($html, $this->lightbox_src, [ "data-lightbox" => $this->lightbox_data, "data-title" => $this->lightbox_title ] );
-		}*/
+		//TODO add glightbox
 
-		//return $html;
         return $html;
 	}
 
@@ -106,17 +100,15 @@ class ImgConverter extends Widget {
         $fileType = exif_imagetype(Yii::getAlias('@webroot') . '' .$inputFile);
 
         $file_info = pathinfo($inputFile);
-
 		$output_filename = $file_info["filename"] . $fileExtension;
+		$output_path = $file_info["dirname"] . "/" . $output_filename;
 
-		$output_short_path = $file_info["dirname"] . "/" . $output_filename;
-
-        if(file_exists(Yii::getAlias('@webroot') . '' . $output_short_path)){
+        if(file_exists(Yii::getAlias('@webroot') . '' . $output_path)){
             switch ($fileExtension) {
-                case 'webp':
-                    return $this->_webp = $output_short_path;
-                case 'avif':    
-                    return $this->_avif = $output_short_path;
+                case '.webp':
+                    return $this->_webp = $output_path;
+                case '.avif':    
+                    return $this->_avif = $output_path;
             }
         } 
 
@@ -136,22 +128,16 @@ class ImgConverter extends Widget {
                 imagealphablending($image, true);
                 imagesavealpha($image, true);
                 break;
-            /*case IMAGETYPE_WEBP:
-                //rename($inputFile, $outputFile); 
-                return;*/
             default:
                 break;
         }
 
-        $conversion = call_user_func($conversionFunction,$image,Yii::getAlias('@webroot'). $output_short_path, $quality);
-        //dd(call_user_func($conversionFunction,$image, $output_short_path, $quality));
+        $conversion = call_user_func($conversionFunction,$image,Yii::getAlias('@webroot'). $output_path, $quality);
         
         if($conversion){
-            return $this->_webp = $output_short_path;
+            return $this->_webp = $output_path;
         }else{
             return null;
-        }
-        
+        }        
     }
-
 }//end class
