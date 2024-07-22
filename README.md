@@ -26,7 +26,7 @@ Once the extension is installed, simply use it in your code by  :
 use sfili81\ImgConverter\ImgConverter;
 //..
 
-echo ImgConverter::widget('src'=>'/path/to/image/image.jpg', 'options'=>['class' => 'my-css-class', 'alt' => 'My Image']); 
+echo ImgConverter::widget(['src'=>'/path/to/image/image.jpg', 'options'=>['class' => 'my-css-class', 'alt' => 'My Image']]); 
 
 ```
 
